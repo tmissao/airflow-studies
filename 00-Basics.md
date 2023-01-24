@@ -68,29 +68,79 @@ There are two ways of deploy Airflow
 docker run --rm -p 8080:8080 apache/airflow:latest standalone
 ```
 
+- Docker Compose (Celeny)
+
+1. Install [Docker Compose](https://docs.docker.com/compose/install/linux/#install-using-the-repository) at least version 1.29
+
+2. Run the following Commands:
+```bash
+# Fetch DockerCompose configuration
+curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.5.0/docker-compose.yaml'
+
+# Create necessary folders
+mkdir -p ./dags ./logs ./plugins
+
+# Get Current User ID and set as environment variable
+echo -e "AIRFLOW_UID=$(id -u)" > .env
+
+# Init Database
+docker compose up airflow-init
+
+# Running Airflow
+docker compose up
+```
+
+3. Access the localhost:8080 and enjoy Airflow
+
+## Running CLI Commands
+---
+
+In order to execute airflow CLI commands there are three alternatives
+
+1. Docker
+```bash
+# docker exec -it <container-id> /bin/bash
+docker exec -it 4cc17695beba /bin/bash
+airflow info
+```
+
+2. Docker Compose
+```bash
+# docker-compose run <container-name> airflow info
+docker-compose run airflow-worker airflow info
+```
+
+3. Linux (It will use docker-compose)
+```bash
+curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.5.0/airflow.sh' 
+chmod +x airflow.sh
+./airflow.sh info
+```
+
+
 ## Including Providers on Docker Image
 ---
 
 In order to add new providers on airflow perform these steps:
 
-1 - Create a new Docker image (based on the desired version) and include the required extra
+1. Create a new Docker image (based on the desired version) and include the required extra
 
 ```Dockerfile
 FROM apache/airflow:slim-2.5.0-python3.9
 RUN pip install --no-cache-dir "apache-airflow[crypto,celery,postgres,cncf.kubernetes,docker]"==2.5.0
 ```
 
-2 - Build the Image
+2. Build the Image
 ```bash
 docker build -t airflow-ext .
 ```
 
-3 - Check the providers
+3. Check the providers
 ```bash
 docker run --rm -p 8080:8080 airflow-ext providers list
 ```
 
-4 - Run the Airflow
+4. Run the Airflow
 ```bash
 docker run --rm -p 8080:8080 airflow-ext standalone
 ```
