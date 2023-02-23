@@ -144,3 +144,19 @@ docker run --rm -p 8080:8080 airflow-ext providers list
 ```bash
 docker run --rm -p 8080:8080 airflow-ext standalone
 ```
+
+## Airflow Configuration
+---
+
+These are the most important parameters in airflow
+
+- `parallelism` - Defines the number of task instances that can run concurrently per scheduler in Airflow, regardless of the worker count.
+- `max_active_run_per_dag` - The maximum number of active DAG run per DAG
+- `max_active_tasks_per_dag` - The maximum number of task instances allowed to run concurrently in each DAG
+- `worker_concurrency` - Defines the number of task instances that a worker will take
+
+  <img src="./artifacts/pictures/00-airflow-configuration.png" width="800">
+
+- `pool` - Since some system can get overwhelmed when too many processes hit them at same time. Airflow pools can be used to limit the execution parallelism on arbitrary sets of tasks.
+
+- `priority_weight` - Allows to prioritize tasks inside a pool, so it defines priorities in the executor. 

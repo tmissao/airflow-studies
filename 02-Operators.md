@@ -21,6 +21,8 @@ Currently there are 3 types of operators in Airflow
 
   - `wait_for_downstream` - when set to true, an instance of task X will wait for tasks immediately downstream of the previous instance of task X to finish successfully or be skipped before it runs. This is useful if the different instances of a task X alter the same asset, and this asset is used by tasks downstream of task X
 
+  - `queue` - which queue to target when running this job.
+
     <img src="./artifacts/pictures/02-wait_for_downstream.png" width="800">
 
 ## Handling Errors
